@@ -17,12 +17,12 @@ library(sjstats) #use for r2 functions
 
 # Load data
 setwd("/Users/prachimahableshwarkar/Documents/GW/Depth_MTurk/spatial_perception_SUNRGBD/joint_analyses/cues/")
-df <- read.csv('groundPlane_participantData_for_lme.csv')
+df <- read.csv('pos_groundPlane_participantData_for_lme.csv')
 df$subjID <- factor(df$subjID) 
 df$duration <- factor(df$duration)
 df$stimulus <- factor(df$stimulus) 
 
-df_grouped <- read.csv('groundPlane_participantData_grouped_for_lme.csv')
+df_grouped <- read.csv('pos_groundPlane_participantData_grouped_for_lme.csv')
 
 # Create models 
 # fixed effect only:
@@ -35,7 +35,7 @@ summary(m_stim)
 
 sort(unique(df$duration))
 
-mod_main <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
+mod_main <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(mod_main)
 
 
@@ -56,7 +56,7 @@ gp_effects_df <- as.data.frame(gp_effects)
 #1
 groundPlane_plot <- ggplot() + 
   #2
-  geom_point(data=subset(df_grouped), aes(groundPlane, abs_s_residual)) + 
+  geom_point(data=subset(df_grouped), aes(groundPlane, s_residual)) + 
   #3
   geom_point(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
   #4
@@ -64,7 +64,7 @@ groundPlane_plot <- ggplot() +
   #5
   geom_ribbon(data= gp_effects_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
   #6
-  labs(x="groundPlane", y="Abs(Residuals)")
+  labs(x="groundPlane", y="Residuals")
 
 groundPlane_plot
 
@@ -92,23 +92,6 @@ dur_plot <- ggplot() +
   labs(x="duration", y="Abs(Residuals)")
 
 dur_plot
-
-# https://rdrr.io/cran/lmerTest/man/plot.ls_means.html
-(lsm <- ls_means(mod_main))
-
-# Multi-frame plot of the LS-means
-plot(lsm)
-
-# Compute list of 'single frame' plots:
-res <- plot(lsm, mult=FALSE)
-
-# Display each plot separately:
-plot(res[[1]])
-plot(res[[2]])
-
-# Example with pairwise differences of LS-means:
-(lsm <- ls_means(model, pairwise = TRUE))
-plot(lsm, which="Temp")
 
 # model comparison
 anova(mod_main)

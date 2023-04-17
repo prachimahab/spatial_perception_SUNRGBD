@@ -26,10 +26,10 @@ df_grouped <- read.csv('participantData_grouped_for_lme.csv')
 
 
 sort(unique(df$duration))
-m6 <- lmer(abs_error ~ clutter + groundPlane + duration + clutter*groundPlane*duration + (1|subjID), data=df)
+m6 <- lmer(abs_error ~ groundPlane + duration + groundPlane*duration + (1|subjID), data=df)
 summary(m6)
 
-m7 <- lmer(abs_error ~ clutter + groundPlane + duration + clutter*groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
+m7 <- lmer(error ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(m7)
 
 sjPlot::plot_model(m6,
@@ -37,10 +37,15 @@ sjPlot::plot_model(m6,
                    title="")
 sjPlot:: tab_model(m6)
 
+anova(m6)
+
 sjPlot::plot_model(m7,
                    show.values=TRUE, show.p=TRUE,
                    title="")
 sjPlot:: tab_model(m7)
+
+anova(m7)
+
 
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 
@@ -48,17 +53,14 @@ sjPlot:: tab_model(m7)
 gp_effects <- effects::effect(term= "groundPlane", mod= m7)
 summary(gp_effects) #output of what the values are
 
-c_effects <- effects::effect(term= "clutter", mod= m7)
-summary(c_effects) #output of what the values are
 
 # Save the effects values as a df:
 gp_effects_df <- as.data.frame(gp_effects)
-c_effects_df <- as.data.frame(c_effects)
 
 #1
 groundPlane_plot <- ggplot() + 
   #2
-  geom_point(data=subset(df_grouped), aes(groundPlane, abs_error)) + 
+  geom_point(data=subset(df_grouped), aes(groundPlane, error)) + 
   #3
   geom_point(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
   #4
@@ -66,7 +68,7 @@ groundPlane_plot <- ggplot() +
   #5
   geom_ribbon(data= gp_effects_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
   #6
-  labs(x="groundPlane", y="Abs(Estimate-Actual)")
+  labs(x="groundPlane", y="Estimate-Actual")
 
 groundPlane_plot
 
