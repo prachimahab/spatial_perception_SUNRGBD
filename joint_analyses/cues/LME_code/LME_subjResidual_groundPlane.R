@@ -17,12 +17,12 @@ library(sjstats) #use for r2 functions
 
 # Load data
 setwd("/Users/prachimahableshwarkar/Documents/GW/Depth_MTurk/spatial_perception_SUNRGBD/joint_analyses/cues/")
-df <- read.csv('pos_groundPlane_participantData_for_lme.csv')
+df <- read.csv('groundPlane_participantData_for_lme.csv')
 df$subjID <- factor(df$subjID) 
 df$duration <- factor(df$duration)
 df$stimulus <- factor(df$stimulus) 
 
-df_grouped <- read.csv('pos_groundPlane_participantData_grouped_for_lme.csv')
+df_grouped <- read.csv('groundPlane_participantData_grouped_for_lme.csv')
 
 # Create models 
 # fixed effect only:
@@ -38,11 +38,18 @@ sort(unique(df$duration))
 mod_main <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(mod_main)
 
+mod_main_abs <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
+summary(mod_main_abs)
 
 sjPlot::plot_model(mod_main,
                    show.values=TRUE, show.p=TRUE, 
                    title="")
 sjPlot:: tab_model(mod_main)
+
+sjPlot::plot_model(mod_main_abs,
+                   show.values=TRUE, show.p=TRUE, 
+                   title="")
+sjPlot:: tab_model(mod_main_abs)
 
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 # 
@@ -68,37 +75,25 @@ groundPlane_plot <- ggplot() +
 
 groundPlane_plot
 
-ggplot(df_grouped, aes(x=duration, y=abs_s_residual, group = interaction(duration, groundPlane))) +
-  geom_smooth(method="lm")
-
-# Use the effects package --> effect function. term= the fixed effect you want to get data on, mod= name of your model.
-dur_effects <- effects::effect(term= "duration", mod= mod_main)
-summary(dur_effects) #output of what the values are
+gp_effects_abs <- effects::effect(term= "groundPlane", mod= mod_main_abs)
+summary(gp_effects_abs) #output of what the values are
 
 # Save the effects values as a df:
-dur_effects_df <- as.data.frame(dur_effects)
+gp_effects_abs_df <- as.data.frame(gp_effects_abs)
 
 #1
-dur_plot <- ggplot() + 
+groundPlane_plot <- ggplot() + 
   #2
-  geom_point(data=subset(df), aes(duration, abs_s_residual)) + 
+  geom_point(data=subset(df_grouped), aes(groundPlane, abs_s_residual)) + 
   #3
-  geom_point(data=dur_effects_df, aes(x=duration, y=fit), color="yellow") +
+  geom_point(data=gp_effects_abs_df, aes(x=groundPlane, y=fit), color="blue") +
   #4
-  geom_line(data=dur_effects_df, aes(x=duration, y=fit), color="yellow") +
+  geom_line(data=gp_effects_abs_df, aes(x=groundPlane, y=fit), color="blue") +
   #5
-  geom_ribbon(data= dur_effects_df, aes(x=duration, ymin=lower, ymax=upper), alpha= 0.3, fill="yellow") +
+  geom_ribbon(data= gp_effects_abs_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
   #6
-  labs(x="duration", y="Abs(Residuals)")
+  labs(x="groundPlane", y="Abs(Residuals)")
 
-dur_plot
-
-# model comparison
-anova(mod_main)
-
-BIC()
+groundPlane_plot
 
 
-# https://github.com/bcjaeger/r2glmm#r2glmm
-r2 <- r2beta(m6, method = 'sgv', partial = T, data = df)
-plot(x=r2)
