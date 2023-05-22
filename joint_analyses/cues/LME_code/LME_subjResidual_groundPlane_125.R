@@ -46,26 +46,26 @@ sjPlot:: tab_model(mod_main_abs)
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 # 
 # Use the effects package --> effect function. term= the fixed effect you want to get data on, mod= name of your model.
-gp_effects <- effects::effect(term= "groundPlane", mod= mod_main)
-summary(gp_effects) #output of what the values are
-
-# Save the effects values as a df:
-gp_effects_df <- as.data.frame(gp_effects)
-
-#1
-groundPlane_plot <- ggplot() + 
-  #2
-  geom_point(data=subset(df_grouped), aes(groundPlane, s_residual)) + 
-  #3
-  geom_point(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
-  #4
-  geom_line(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
-  #5
-  geom_ribbon(data= gp_effects_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
-  #6
-  labs(x="groundPlane", y="Residuals")
-
-groundPlane_plot
+# gp_effects <- effects::effect(term= "groundPlane", mod= mod_main)
+# summary(gp_effects) #output of what the values are
+# 
+# # Save the effects values as a df:
+# gp_effects_df <- as.data.frame(gp_effects)
+# 
+# #1
+# groundPlane_plot <- ggplot() + 
+#   #2
+#   geom_point(data=subset(df_grouped), aes(groundPlane, s_residual)) + 
+#   #3
+#   geom_point(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
+#   #4
+#   geom_line(data=gp_effects_df, aes(x=groundPlane, y=fit), color="blue") +
+#   #5
+#   geom_ribbon(data= gp_effects_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
+#   #6
+#   labs(x="groundPlane", y="Residuals")
+# 
+# groundPlane_plot
 
 gp_effects_abs <- effects::effect(term= "groundPlane", mod= mod_main_abs)
 summary(gp_effects_abs) #output of what the values are
@@ -74,18 +74,30 @@ summary(gp_effects_abs) #output of what the values are
 gp_effects_abs_df <- as.data.frame(gp_effects_abs)
 
 #1
+#1
 groundPlane_plot <- ggplot() + 
+  theme_minimal() +  # Removes background and grid
+  theme(
+    panel.grid = element_blank(),  # Removes grid lines
+    panel.background = element_blank(),  # Removes background
+    axis.text = element_text(size = 12),  # Increase axis tick label font size
+    axis.title = element_text(size = 14),  # Increase axis label font size
+    axis.line = element_line(color = "black")  # Sets the color of axis spines
+  ) +
+  
   #2
-  geom_point(data=subset(df_grouped), aes(groundPlane, abs_s_residual)) + 
+  geom_point(data = subset(df_grouped), aes(groundPlane, abs_s_residual)) + 
   #3
-  geom_point(data=gp_effects_abs_df, aes(x=groundPlane, y=fit), color="blue") +
+  geom_point(data = gp_effects_abs_df, aes(x = groundPlane, y = fit), color = "darkgreen") +
   #4
-  geom_line(data=gp_effects_abs_df, aes(x=groundPlane, y=fit), color="blue") +
+  geom_line(data = gp_effects_abs_df, aes(x = groundPlane, y = fit), color = "darkgreen") +
   #5
-  geom_ribbon(data= gp_effects_abs_df, aes(x=groundPlane, ymin=lower, ymax=upper), alpha= 0.3, fill="blue") +
+  geom_ribbon(data = gp_effects_abs_df, aes(x = groundPlane, ymin = lower, ymax = upper), alpha = 0.3, fill = "darkgreen") +
   #6
-  labs(x="groundPlane", y="Abs(Residuals)")
+  labs(x = "Complete Ground Plane", y = "Abs(Residuals)") +
+  #7
+  scale_y_continuous(limits = c(0.35, 1.1))
 
-groundPlane_plot
-
+# Display the plot
+print(groundPlane_plot)
 

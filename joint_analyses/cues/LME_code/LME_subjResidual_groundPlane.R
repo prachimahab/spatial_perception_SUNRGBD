@@ -19,7 +19,7 @@ library(sjstats) #use for r2 functions
 setwd("/Users/prachimahableshwarkar/Documents/GW/Depth_MTurk/spatial_perception_SUNRGBD/joint_analyses/cues/")
 df <- read.csv('groundPlane_participantData_for_lme.csv')
 df$subjID <- factor(df$subjID) 
-df$duration <- factor(df$duration)
+# df$duration <- factor(df$duration)
 df$stimulus <- factor(df$stimulus) 
 
 df_grouped <- read.csv('groundPlane_participantData_grouped_for_lme.csv')
@@ -38,6 +38,7 @@ sort(unique(df$duration))
 mod_main <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(mod_main)
 
+
 mod_main_abs <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(mod_main_abs)
 
@@ -50,6 +51,10 @@ sjPlot::plot_model(mod_main_abs,
                    show.values=TRUE, show.p=TRUE, 
                    title="")
 sjPlot:: tab_model(mod_main_abs)
+
+anova(mod_main)
+
+anova(mod_main_abs)
 
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 # 
