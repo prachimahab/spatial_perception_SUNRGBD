@@ -35,24 +35,37 @@ library(sjstats) #use for r2 functions
 # Load data
 setwd("/Users/prachimahableshwarkar/Documents/GW/Depth_MTurk/spatial_perception_SUNRGBD/joint_analyses/cues/")
 
-df_pos <- read.csv('pos_groundPlane_participantData_for_lme.csv')
+# df_pos <- read.csv('pos_groundPlane_participantData_for_lme.csv')
+df_pos <- read.csv('groundPlane_pos.csv')
 df_pos$subjID <- factor(df_pos$subjID) 
-# df_pos$duration <- factor(df_pos$duration)
+df_pos$duration <- factor(df_pos$duration)
 df_pos$stimulus <- factor(df_pos$stimulus) 
-df_pos_grouped <- read.csv('pos_groundPlane_participantData_grouped_for_lme.csv')
+# df_pos_grouped <- read.csv('pos_groundPlane_participantData_grouped_for_lme.csv')
 
-df_neg <- read.csv('neg_groundPlane_participantData_for_lme.csv')
+df_neg <- read.csv('groundPlane_neg.csv')
 df_neg$subjID <- factor(df_neg$subjID) 
-# df_neg$duration <- factor(df_neg$duration)
+df_neg$duration <- factor(df_neg$duration)
 df_neg$stimulus <- factor(df_neg$stimulus) 
-df_neg_grouped <- read.csv('neg_groundPlane_participantData_grouped_for_lme.csv')
+# df_neg_grouped <- read.csv('neg_groundPlane_participantData_grouped_for_lme.csv')
 
 sort(unique(df_pos$duration))
 
-mod_pos <- lmer(pos_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_pos)
+# mod_pos <- lmer(pos_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_pos)
+# summary(mod_pos)
+# 
+# mod_neg <- lmer(neg_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_neg)
+# summary(mod_neg)
+
+# mod_pos <- lmer(residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df_pos)
+# summary(mod_pos)
+# 
+# mod_neg <- lmer(residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df_neg)
+# summary(mod_neg)
+
+mod_pos <- lmer(residuals ~ groundPlane + duration + groundPlane*duration, data=df_pos)
 summary(mod_pos)
 
-mod_neg <- lmer(neg_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_neg)
+mod_neg <- lmer(residuals ~ groundPlane + duration + groundPlane*duration, data=df_neg)
 summary(mod_neg)
 
 sjPlot::plot_model(mod_pos,
@@ -93,7 +106,7 @@ groundPlane_plot <- ggplot() +
   ) +
   
   #2
-  geom_point(data = subset(df_pos_grouped), aes(groundPlane, pos_s_residual)) + 
+  geom_point(data = subset(df_pos), aes(groundPlane, residuals)) + 
   #3
   geom_point(data = gp_effects_pos_df, aes(x = groundPlane, y = fit), color = "darkgrey") +
   #4
@@ -102,7 +115,7 @@ groundPlane_plot <- ggplot() +
   geom_ribbon(data = gp_effects_pos_df, aes(x = groundPlane, ymin = lower, ymax = upper), alpha = 0.3, fill = "darkgrey") +
   
   #2
-  geom_point(data = subset(df_neg_grouped), aes(groundPlane, neg_s_residual)) + 
+  geom_point(data = subset(df_neg), aes(groundPlane, residuals)) + 
   #3
   geom_point(data = gp_effects_neg_df, aes(x = groundPlane, y = fit), color = "darkgrey") +
   #4

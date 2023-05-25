@@ -17,40 +17,43 @@ library(sjstats) #use for r2 functions
 
 # Load data
 setwd("/Users/prachimahableshwarkar/Documents/GW/Depth_MTurk/spatial_perception_SUNRGBD/joint_analyses/cues/")
-df <- read.csv('groundPlane_participantData_for_lme.csv')
-df$subjID <- factor(df$subjID) 
-# df$duration <- factor(df$duration)
+df_subj <- read.csv('groundPlane_participantData_for_lme.csv')
+df_subj$subjID <- factor(df_subj$subjID) 
+df_subj$duration <- factor(df_subj$duration)
+df_subj$stimulus <- factor(df_subj$stimulus) 
+
+df <- read.csv('groundPlane_data_for_lme.csv')
+df$duration <- factor(df$duration)
 df$stimulus <- factor(df$stimulus) 
 
 df_grouped <- read.csv('groundPlane_participantData_grouped_for_lme.csv')
 
-# Create models 
-# fixed effect only:
-m_dur<- lm(abs_s_residual ~ duration, data=df)
-summary(m_dur)
-
-m_stim<- lm(abs_s_residual ~ stimulus, data=df)
-summary(m_stim)
-
 
 sort(unique(df$duration))
 
-mod_main <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
+mod_main_subj <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_subj)
 summary(mod_main)
 
 
-mod_main_abs <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
+mod_main_abs_subj <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_subj)
 summary(mod_main_abs)
 
-sjPlot::plot_model(mod_main,
-                   show.values=TRUE, show.p=TRUE, 
-                   title="")
+
+mod_main <- lmer(residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
+summary(mod_main)
+
+mod_main_abs <- lmer(abs_residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
+summary(mod_main_abs)
+
+
+
 sjPlot:: tab_model(mod_main)
 
-sjPlot::plot_model(mod_main_abs,
-                   show.values=TRUE, show.p=TRUE, 
-                   title="")
 sjPlot:: tab_model(mod_main_abs)
+
+anova(mod_main_subj)
+
+anova(mod_main_abs_subj)
 
 anova(mod_main)
 

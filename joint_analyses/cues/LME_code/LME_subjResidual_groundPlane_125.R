@@ -27,10 +27,17 @@ df_grouped <- read.csv('125_groundPlane_participantData_grouped_for_lme.csv')
 
 sort(unique(df$duration))
 
-mod_main <- lmer(s_residual ~ groundPlane + (1|subjID) + (1|actual_depth), data=df)
+# mod_main <- lmer(s_residual ~ groundPlane + (1|subjID) + (1|actual_depth), data=df)
+# summary(mod_main)
+# 
+# mod_main_abs <- lmer(abs_s_residual ~ groundPlane + (1|subjID) + (1|actual_depth), data=df)
+# summary(mod_main_abs)
+
+
+mod_main <- lmer(s_residual ~ groundPlane + (1|actual_depth), data=df)
 summary(mod_main)
 
-mod_main_abs <- lmer(abs_s_residual ~ groundPlane + (1|subjID) + (1|actual_depth), data=df)
+mod_main_abs <- lmer(abs_s_residual ~ groundPlane + (1|actual_depth), data=df)
 summary(mod_main_abs)
 
 sjPlot::plot_model(mod_main,

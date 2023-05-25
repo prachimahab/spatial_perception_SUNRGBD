@@ -100,3 +100,6 @@ groundPlane_plot <- ggplot() +
 # Display the plot
 print(groundPlane_plot)
 
+anova(mod_main)
+anova(mod_main_abs)
+ 
