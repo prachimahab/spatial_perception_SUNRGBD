@@ -31,6 +31,9 @@ df_grouped <- read.csv('groundPlane_participantData_grouped_for_lme.csv')
 
 sort(unique(df$duration))
 
+# fixed effects:groundPlane, duration 
+# interaction: groundPlane*duration
+# random effects: subjID, actual_depth
 mod_main_subj <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_subj)
 summary(mod_main)
 

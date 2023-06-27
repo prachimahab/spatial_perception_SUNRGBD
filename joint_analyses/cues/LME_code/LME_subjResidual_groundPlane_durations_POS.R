@@ -90,15 +90,15 @@ groundPlane_plot_pos <- ggplot() +
   ) +
   
   # geom_point(data = gp_effects_pos_df_125, aes(x = groundPlane, y = fit), color = "darkgreen") +
-  geom_line(data = gp_effects_pos_df_125, aes(x = groundPlane, y = fit), color = "darkgreen") +
+  geom_line(data = gp_effects_pos_df_125, aes(x = groundPlane, y = fit), color = "darkgreen", size=1) +
   geom_ribbon(data = gp_effects_pos_df_125, aes(x = groundPlane, ymin = lower, ymax = upper), alpha = 0.2, fill = "darkgreen") +
 
   # geom_point(data = gp_effects_pos_df_1000, aes(x = groundPlane, y = fit), color = "darkviolet") +
-  geom_line(data = gp_effects_pos_df_1000, aes(x = groundPlane, y = fit), color = "darkviolet") +
+  geom_line(data = gp_effects_pos_df_1000, aes(x = groundPlane, y = fit), color = "darkviolet", size=1) +
   geom_ribbon(data = gp_effects_pos_df_1000, aes(x = groundPlane, ymin = lower, ymax = upper), alpha = 0.2, fill = "darkviolet") +
 
   # geom_point(data = gp_effects_pos_df_250, aes(x = groundPlane, y = fit), color = "chocolate") +
-  geom_line(data = gp_effects_pos_df_250, aes(x = groundPlane, y = fit), color = "chocolate") +
+  geom_line(data = gp_effects_pos_df_250, aes(x = groundPlane, y = fit), color = "chocolate", size=1) +
   geom_ribbon(data = gp_effects_pos_df_250, aes(x = groundPlane, ymin = lower, ymax = upper), alpha = 0.2, fill = "chocolate") +
   #6
   labs(x = "Complete Ground Plane", y = "Residuals") +
