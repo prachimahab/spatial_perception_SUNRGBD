@@ -29,6 +29,12 @@ summary(mod_main)
 mod_keystrokes <- lmer(trial_RT ~ actual_depth + duration + actual_depth*duration + (1|subjID) + (1|keystrokes), data=df_subj)
 summary(mod_keystrokes)
 
+mod_main2 <- lmer(trial_RT ~ depth_estimate  + (1|subjID), data=df_subj)
+summary(mod_main2)
+
+mod_keystrokes2 <- lmer(trial_RT ~ depth_estimate + (1|subjID) + (1|keystrokes), data=df_subj)
+summary(mod_keystrokes2)
+
 
 sjPlot:: tab_model(mod_main)
 sjPlot:: tab_model(mod_keystrokes)
@@ -37,6 +43,8 @@ sjPlot:: tab_model(mod_keystrokes)
 anova(mod_main)
 anova(mod_keystrokes)
 
+anova(mod_main2)
+anova(mod_keystrokes2)
 
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 # 
