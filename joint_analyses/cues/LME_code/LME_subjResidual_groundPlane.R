@@ -35,32 +35,32 @@ sort(unique(df$duration))
 # interaction: groundPlane*duration
 # random effects: subjID, actual_depth
 mod_main_subj <- lmer(s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_subj)
-summary(mod_main)
+summary(mod_main_subj)
 
 
 mod_main_abs_subj <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df_subj)
-summary(mod_main_abs)
+summary(mod_main_abs_subj)
+
+# 
+# mod_main <- lmer(residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
+# summary(mod_main)
+# 
+# mod_main_abs <- lmer(abs_residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
+# summary(mod_main_abs)
 
 
-mod_main <- lmer(residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
-summary(mod_main)
 
-mod_main_abs <- lmer(abs_residuals ~ groundPlane + duration + groundPlane*duration + (1|actual_depth), data=df)
-summary(mod_main_abs)
-
-
-
-sjPlot:: tab_model(mod_main)
-
-sjPlot:: tab_model(mod_main_abs)
+# sjPlot:: tab_model(mod_main)
+# 
+# sjPlot:: tab_model(mod_main_abs)
 
 anova(mod_main_subj)
 
 anova(mod_main_abs_subj)
 
-anova(mod_main)
-
-anova(mod_main_abs)
+# anova(mod_main)
+# 
+# anova(mod_main_abs)
 
 # Plotting code: https://lmudge13.github.io/sample_code/mixed_effects.html
 # 
