@@ -37,7 +37,7 @@ df_grouped <- rbind(df_grouped_125, df_grouped_250)
 
 sort(unique(df$duration))
 
-mod_main_abs <- lmer(abs_s_residual ~ groundPlane + duration + (1|subjID) + (1|actual_depth), data=df)
+mod_main_abs <- lmer(abs_s_residual ~ groundPlane + duration + groundPlane*duration + (1|subjID) + (1|actual_depth), data=df)
 summary(mod_main_abs)
 
 anova(mod_main_abs)

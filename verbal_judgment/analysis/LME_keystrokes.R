@@ -29,10 +29,10 @@ summary(mod_main)
 mod_keystrokes <- lmer(trial_RT ~ actual_depth + duration + actual_depth*duration + (1|subjID) + (1|keystrokes), data=df_subj)
 summary(mod_keystrokes)
 
-mod_main2 <- lmer(trial_RT ~ depth_estimate  + (1|subjID), data=df_subj)
+mod_main2 <- lmer(trial_RT ~ depth_estimate + duration + depth_estimate*duration (1|subjID), data=df_subj)
 summary(mod_main2)
 
-mod_keystrokes2 <- lmer(trial_RT ~ depth_estimate + (1|subjID) + (1|keystrokes), data=df_subj)
+mod_keystrokes2 <- lmer(trial_RT ~ depth_estimate + duration + depth_estimate*duration + (1|subjID) + (1|keystrokes), data=df_subj)
 summary(mod_keystrokes2)
 
 
